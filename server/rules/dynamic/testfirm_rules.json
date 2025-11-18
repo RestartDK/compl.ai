@@ -1,0 +1,47 @@
+{
+  "firm_name": "TestFirm",
+  "policy_version": "2025-11",
+  "last_updated": "2025-11-18T18:24:22.037Z",
+  "generated_by_llm": true,
+  "total_iterations": 2,
+  "rules": [
+    {
+      "rule_id": "earnings_blackout_period",
+      "rule_name": "Earnings Announcement Trading Blackout",
+      "description": "Prevents trading within 5 days of earnings announcements",
+      "policy_reference": "TestFirm Trading Policy Section 1",
+      "python_code": "def rule(employee, security, trade_date):\n    \"\"\"Enforces the 5-day trading blackout period around earnings announcements.\"\"\"\n    if security.get(\"earnings_date\"):\n        from datetime import datetime, timedelta\n        \n        # Parse dates\n        earnings_date = datetime.strptime(security[\"earnings_date\"], \"%Y-%m-%d\")\n        trade_date_obj = datetime.strptime(trade_date, \"%Y-%m-%d\")\n        \n        # Calculate date difference\n        days_diff = abs((earnings_date - trade_date_obj).days)\n        \n        if days_diff < 5:\n            return {\n                \"allowed\": False,\n                \"reason\": f\"Trade date is within 5 days of earnings announcement on {security['earnings_date']}\",\n                \"policy_ref\": \"TestFirm Trading Policy Section 1\"\n            }\n    \n    return {\"allowed\": True}",
+      "applies_to_roles": [],
+      "active": true,
+      "generation_attempt": 1,
+      "validation_history": [
+        {
+          "attempt_number": 1,
+          "passed": true,
+          "test_output": "{\"allowed\":false,\"reason\":\"Trade date is within 5 days of earnings announcement on 2025-11-20\",\"policy_ref\":\"TestFirm Trading Policy Section 1\"}",
+          "timestamp": "2025-11-18T18:24:21.209Z"
+        }
+      ]
+    },
+    {
+      "rule_id": "analyst_preapproval",
+      "rule_name": "Analyst Pre-approval Requirement",
+      "description": "Requires analysts to obtain pre-approval for trades in covered securities",
+      "policy_reference": "TestFirm Trading Policy Section 2",
+      "python_code": "def rule(employee, security, trade_date):\n    \"\"\"Enforces pre-approval requirement for analysts trading covered securities.\"\"\"\n    if employee.get(\"role\") == \"Analyst\" and security.get(\"is_covered\", False):\n        if not security.get(\"pre_approved\", False):\n            return {\n                \"allowed\": False,\n                \"reason\": \"Analysts must obtain pre-approval for trades in covered securities\",\n                \"policy_ref\": \"TestFirm Trading Policy Section 2\"\n            }\n    \n    return {\"allowed\": True}",
+      "applies_to_roles": [
+        "Analyst"
+      ],
+      "active": true,
+      "generation_attempt": 1,
+      "validation_history": [
+        {
+          "attempt_number": 1,
+          "passed": true,
+          "test_output": "{\"allowed\":true}",
+          "timestamp": "2025-11-18T18:24:22.037Z"
+        }
+      ]
+    }
+  ]
+}

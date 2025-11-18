@@ -1,0 +1,451 @@
+{
+  "demo_employees": [
+    {
+      "id": "EMP001",
+      "name": "Sarah Chen",
+      "role": "Managing Director - Tech Investment Banking",
+      "tier": 1,
+      "department": "Investment Banking",
+      "sector": "Technology",
+      "active_deals": [
+        {
+          "company": "CloudVision AI",
+          "ticker": "CVAI",
+          "deal_type": "IPO",
+          "reason": "Lead banker on IPO deal"
+        },
+        {
+          "company": "DataStream Technologies",
+          "ticker": "DSTM",
+          "deal_type": "M&A Advisory",
+          "reason": "Senior advisor on acquisition"
+        }
+      ],
+      "restricted_tickers": [
+        "CVAI",
+        "DSTM",
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "META",
+        "NVDA",
+        "AMZN",
+        "TSLA",
+        "ORCL",
+        "CRM",
+        "ADBE",
+        "INTC",
+        "AMD",
+        "SNOW",
+        "PLTR",
+        "NOW",
+        "PANW",
+        "CRWD",
+        "NET"
+      ],
+      "restriction_reason": "All technology stocks prohibited (sector coverage)",
+      "can_trade": [
+        "SPY",
+        "VTI",
+        "BND",
+        "AGG",
+        "GLD"
+      ],
+      "can_trade_reason": "Broad market index funds permitted with 90-day hold"
+    },
+    {
+      "id": "EMP002",
+      "name": "Jennifer Martinez",
+      "role": "Equity Research Analyst - Technology",
+      "tier": 2,
+      "department": "Research",
+      "sector": "Technology",
+      "coverage_stocks": [
+        {
+          "ticker": "AAPL",
+          "company": "Apple Inc",
+          "rating": "Buy",
+          "price_target": 250
+        },
+        {
+          "ticker": "MSFT",
+          "company": "Microsoft",
+          "rating": "Buy",
+          "price_target": 475
+        },
+        {
+          "ticker": "GOOGL",
+          "company": "Alphabet",
+          "rating": "Hold",
+          "price_target": 185
+        },
+        {
+          "ticker": "META",
+          "company": "Meta Platforms",
+          "rating": "Sell",
+          "price_target": 420
+        },
+        {
+          "ticker": "NVDA",
+          "company": "NVIDIA",
+          "rating": "Strong Buy",
+          "price_target": 180
+        }
+      ],
+      "restricted_tickers": [
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "META",
+        "NVDA",
+        "AMZN",
+        "TSLA",
+        "NFLX",
+        "AMD",
+        "INTC",
+        "QCOM",
+        "AVGO",
+        "ORCL",
+        "CRM",
+        "ADBE",
+        "NOW"
+      ],
+      "restriction_reason": "Cannot trade coverage stocks or any tech sector (FINRA 2241)",
+      "quiet_periods": [
+        {
+          "ticker": "NVDA",
+          "start": "2025-01-16",
+          "end": "2025-03-02",
+          "reason": "Earnings preview report publishing Feb 15"
+        }
+      ],
+      "can_trade": [
+        "XLF",
+        "XLV",
+        "XLE",
+        "SPY",
+        "VTI"
+      ],
+      "can_trade_reason": "Non-tech sector ETFs and broad market funds"
+    },
+    {
+      "id": "EMP003",
+      "name": "Marcus Thompson",
+      "role": "VP - Healthcare Investment Banking",
+      "tier": 1,
+      "department": "Investment Banking",
+      "sector": "Healthcare",
+      "active_deals": [
+        {
+          "company": "BioNova Therapeutics",
+          "ticker": null,
+          "deal_type": "Private Placement",
+          "reason": "Deal lead on $200M funding"
+        }
+      ],
+      "restricted_tickers": [
+        "PFE",
+        "JNJ",
+        "UNH",
+        "LLY",
+        "ABBV",
+        "MRK",
+        "TMO",
+        "ABT",
+        "AMGN",
+        "GILD",
+        "BMY",
+        "CVS",
+        "REGN",
+        "VRTX",
+        "ISRG",
+        "DHR",
+        "SYK",
+        "MDT",
+        "BSX",
+        "ELV"
+      ],
+      "restriction_reason": "All healthcare stocks prohibited (sector coverage)",
+      "family_conflicts": [
+        {
+          "person": "Spouse - Jessica Thompson",
+          "employer": "Pfizer",
+          "position": "Clinical Research Associate",
+          "creates_additional_restriction": "PFE",
+          "status": "Disclosed and approved with monitoring"
+        }
+      ],
+      "can_trade": [
+        "SPY",
+        "QQQ",
+        "VTI",
+        "XLK",
+        "XLF"
+      ],
+      "can_trade_reason": "Non-healthcare sectors and broad market funds"
+    },
+    {
+      "id": "EMP004",
+      "name": "David Kumar",
+      "role": "Equity Trader - Technology Desk",
+      "tier": 2,
+      "department": "Trading",
+      "sector": "Technology",
+      "trading_desk": "Technology Equities",
+      "restricted_tickers": [
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "META",
+        "NVDA",
+        "AMZN",
+        "TSLA",
+        "NFLX",
+        "AMD",
+        "INTC",
+        "QCOM",
+        "AVGO",
+        "ORCL",
+        "CRM",
+        "ADBE",
+        "NOW",
+        "SNOW",
+        "PLTR",
+        "DDOG",
+        "NET",
+        "CRWD",
+        "All individual stocks"
+      ],
+      "restriction_reason": "Cannot trade stocks you trade professionally - creates conflict",
+      "can_trade": [
+        "TLT",
+        "AGG",
+        "BND",
+        "GLD",
+        "SLV",
+        "USO"
+      ],
+      "can_trade_reason": "Different asset classes only (bonds, commodities)"
+    },
+    {
+      "id": "EMP005",
+      "name": "Rachel Winters",
+      "role": "Chief Compliance Officer",
+      "tier": 3,
+      "department": "Compliance",
+      "sector": "N/A",
+      "restricted_tickers": [
+        "ALL_INDIVIDUAL_STOCKS",
+        "All 250+ securities on any Meridian restricted list"
+      ],
+      "restriction_reason": "Compliance officers prohibited from individual stock trading (must be above reproach)",
+      "can_trade": [
+        "SPY",
+        "VTI",
+        "VOO",
+        "VTSAX",
+        "BND",
+        "AGG"
+      ],
+      "can_trade_reason": "Only broad market index funds with 180-day holding period"
+    },
+    {
+      "id": "EMP006",
+      "name": "Michelle Washington",
+      "role": "Executive Assistant to CEO",
+      "tier": 4,
+      "department": "Executive Office",
+      "sector": "N/A",
+      "restricted_tickers": [
+        "CVAI",
+        "DSTM"
+      ],
+      "restriction_reason": "Only restricted from active deal stocks she may overhear",
+      "recently_overheard": [
+        {
+          "ticker": "CVAI",
+          "date": "2024-11-10",
+          "context": "CEO meeting discussing IPO timeline",
+          "restriction_ends": "TBD - until public or deal cancelled"
+        }
+      ],
+      "can_trade": [
+        "AAPL",
+        "MSFT",
+        "TSLA",
+        "DIS",
+        "KO",
+        "WMT",
+        "Most stocks"
+      ],
+      "can_trade_reason": "Tier 4 has minimal restrictions"
+    }
+  ],
+  "firm_restricted_list": [
+    {
+      "ticker": "CVAI",
+      "company": "CloudVision AI",
+      "reason": "Active IPO - all employees blocked",
+      "deal_type": "IPO",
+      "expected_close": "2025-02-15",
+      "applies_to": "ALL_EMPLOYEES"
+    },
+    {
+      "ticker": "DSTM",
+      "company": "DataStream Technologies",
+      "reason": "Active M&A advisory - all employees blocked",
+      "deal_type": "M&A",
+      "expected_close": "2025-01-30",
+      "applies_to": "ALL_EMPLOYEES"
+    },
+    {
+      "ticker": "GCRE",
+      "company": "GenomicsCare Inc",
+      "reason": "Active M&A buy-side advisory",
+      "deal_type": "M&A",
+      "expected_close": "2025-03-15",
+      "applies_to": "ALL_EMPLOYEES"
+    }
+  ],
+  "test_scenarios": [
+    {
+      "scenario_id": 1,
+      "employee_id": "EMP006",
+      "employee_name": "Michelle Washington (Admin)",
+      "query": "Can I buy Tesla stock?",
+      "ticker": "TSLA",
+      "expected_result": "APPROVED",
+      "confidence": "HIGH",
+      "reason": "Tier 4 employee, no restrictions on TSLA"
+    },
+    {
+      "scenario_id": 2,
+      "employee_id": "EMP002",
+      "employee_name": "Jennifer Martinez (Research)",
+      "query": "Can I buy Apple?",
+      "ticker": "AAPL",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "You cover AAPL - absolute prohibition under FINRA 2241"
+    },
+    {
+      "scenario_id": 3,
+      "employee_id": "EMP001",
+      "employee_name": "Sarah Chen (Tech Banker)",
+      "query": "Can I trade CloudVision AI?",
+      "ticker": "CVAI",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "You are lead banker on CVAI IPO - active deal team"
+    },
+    {
+      "scenario_id": 4,
+      "employee_id": "EMP001",
+      "employee_name": "Sarah Chen (Tech Banker)",
+      "query": "Can I buy Microsoft?",
+      "ticker": "MSFT",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "MSFT is in your tech sector coverage universe"
+    },
+    {
+      "scenario_id": 5,
+      "employee_id": "EMP001",
+      "employee_name": "Sarah Chen (Tech Banker)",
+      "query": "Can I buy SPY?",
+      "ticker": "SPY",
+      "expected_result": "APPROVED_WITH_CONDITIONS",
+      "confidence": "HIGH",
+      "reason": "Broad market ETF permitted",
+      "conditions": [
+        "Requires pre-clearance",
+        "90-day holding period",
+        "Execute within 5 days of approval"
+      ]
+    },
+    {
+      "scenario_id": 6,
+      "employee_id": "EMP005",
+      "employee_name": "Rachel Winters (CCO)",
+      "query": "Can I buy Tesla?",
+      "ticker": "TSLA",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "Compliance officers prohibited from individual stock trading"
+    },
+    {
+      "scenario_id": 7,
+      "employee_id": "EMP003",
+      "employee_name": "Marcus Thompson (Healthcare Banker)",
+      "query": "Can I buy Pfizer? My wife works there.",
+      "ticker": "PFE",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "Multiple restrictions: (1) PFE in healthcare coverage (2) Spouse employment creates conflict"
+    },
+    {
+      "scenario_id": 8,
+      "employee_id": "EMP004",
+      "employee_name": "David Kumar (Trader)",
+      "query": "Can I buy Apple stock?",
+      "ticker": "AAPL",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "You trade AAPL professionally - personal trading prohibited"
+    },
+    {
+      "scenario_id": 9,
+      "employee_id": "EMP002",
+      "employee_name": "Jennifer Martinez (Research)",
+      "query": "Can I buy QQQ?",
+      "ticker": "QQQ",
+      "expected_result": "REQUIRES_REVIEW",
+      "confidence": "MEDIUM",
+      "reason": "QQQ (Nasdaq 100 ETF) contains your covered stocks: AAPL (9%), MSFT (8%), NVDA (7%), etc. Likely DENIED but requires compliance review"
+    },
+    {
+      "scenario_id": 10,
+      "employee_id": "EMP006",
+      "employee_name": "Michelle Washington (Admin)",
+      "query": "Can I buy CloudVision AI?",
+      "ticker": "CVAI",
+      "expected_result": "BLOCKED",
+      "confidence": "HIGH",
+      "reason": "Firm-wide restriction - active IPO deal. You also overheard MNPI about this deal."
+    }
+  ],
+  "quick_reference": {
+    "tier_1_employees": [
+      "EMP001",
+      "EMP003"
+    ],
+    "tier_2_employees": [
+      "EMP002",
+      "EMP004"
+    ],
+    "tier_3_employees": [
+      "EMP005"
+    ],
+    "tier_4_employees": [
+      "EMP006"
+    ],
+    "always_blocked_tickers": [
+      "CVAI",
+      "DSTM",
+      "GCRE"
+    ],
+    "easy_approval_examples": [
+      {
+        "employee": "EMP006",
+        "tickers": [
+          "TSLA",
+          "DIS",
+          "KO",
+          "WMT",
+          "V",
+          "MA"
+        ]
+      }
+    ]
+  }
+}
