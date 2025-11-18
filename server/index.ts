@@ -13,6 +13,11 @@ const server = Bun.serve({
   hostname: "0.0.0.0", // Listen on all network interfaces
   port: Number(process.env.PORT ?? 3000),
   routes: {
+    "/health": {
+      GET: () => {
+        return Response.json({ status: "ok", timestamp: new Date().toISOString() });
+      },
+    },
     "/api/policies/ingest": {
       POST: policyIngest,
     },

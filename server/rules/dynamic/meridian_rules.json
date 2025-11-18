@@ -1,50 +1,8 @@
 {
   "firm_name": "Meridian",
   "policy_version": "2025-11",
-  "last_updated": "2025-11-18T19:50:55.021Z",
+  "last_updated": "2025-11-18T20:00:13.775Z",
   "generated_by_llm": true,
   "total_iterations": 2,
-  "rules": [
-    {
-      "rule_id": "meridian_earnings_blackout",
-      "rule_name": "Earnings Announcement Blackout Period",
-      "description": "Prohibits trading within 5 days before or after earnings announcements",
-      "policy_reference": "Meridian Trading Policy - Earnings Blackout",
-      "python_code": "def rule(employee, security, trade_date):\n    \"\"\"Enforce 5-day blackout period around earnings announcements.\"\"\"\n    from datetime import timedelta\n    \n    if not security or not trade_date:\n        return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}\n    \n    earnings_date = security.get(\"next_earnings_date\") or security.get(\"last_earnings_date\")\n    \n    if not earnings_date:\n        return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}\n    \n    # Calculate 5-day window (before and after)\n    blackout_start = earnings_date - timedelta(days=5)\n    blackout_end = earnings_date + timedelta(days=5)\n    \n    if blackout_start <= trade_date <= blackout_end:\n        return {\n            \"allowed\": False,\n            \"reason\": f\"Trade falls within 5-day blackout period around earnings date {earnings_date.strftime('%Y-%m-%d')}\",\n            \"policy_ref\": \"Meridian Trading Policy - Earnings Blackout\"\n        }\n    \n    return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}",
-      "applies_to_roles": [],
-      "active": true,
-      "generation_attempt": 1,
-      "validation_history": [
-        {
-          "attempt_number": 1,
-          "passed": true,
-          "test_output": "{\"allowed\":true,\"reason\":null,\"policy_ref\":null}",
-          "timestamp": "2025-11-18T19:50:53.745Z"
-        }
-      ]
-    },
-    {
-      "rule_id": "meridian_analyst_preapproval",
-      "rule_name": "Analyst Pre-Approval for Covered Securities",
-      "description": "Requires analysts to obtain pre-approval before trading securities they cover",
-      "policy_reference": "Meridian Trading Policy - Analyst Pre-Approval",
-      "python_code": "def rule(employee, security, trade_date):\n    \"\"\"Enforce pre-approval requirement for analysts trading covered securities.\"\"\"\n    \n    if not employee or not security:\n        return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}\n    \n    employee_role = employee.get(\"role\", \"\").lower()\n    is_analyst = \"analyst\" in employee_role\n    \n    if not is_analyst:\n        return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}\n    \n    # Check if security is in analyst's coverage list\n    covered_securities = employee.get(\"covered_securities\", [])\n    security_ticker = security.get(\"ticker\", \"\")\n    security_id = security.get(\"security_id\", \"\")\n    \n    is_covered = (security_ticker in covered_securities or \n                  security_id in covered_securities)\n    \n    if not is_covered:\n        return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}\n    \n    # Check for pre-approval\n    has_preapproval = employee.get(\"has_preapproval\", False)\n    preapproved_securities = employee.get(\"preapproved_securities\", [])\n    \n    is_preapproved = (has_preapproval or \n                     security_ticker in preapproved_securities or\n                     security_id in preapproved_securities)\n    \n    if not is_preapproved:\n        return {\n            \"allowed\": False,\n            \"reason\": f\"Analyst must obtain pre-approval to trade covered security {security_ticker or security_id}\",\n            \"policy_ref\": \"Meridian Trading Policy - Analyst Pre-Approval\"\n        }\n    \n    return {\"allowed\": True, \"reason\": None, \"policy_ref\": None}",
-      "applies_to_roles": [
-        "Analyst",
-        "Research Analyst",
-        "Senior Analyst",
-        "Equity Analyst"
-      ],
-      "active": true,
-      "generation_attempt": 1,
-      "validation_history": [
-        {
-          "attempt_number": 1,
-          "passed": true,
-          "test_output": "{\"allowed\":true,\"reason\":null,\"policy_ref\":null}",
-          "timestamp": "2025-11-18T19:50:55.021Z"
-        }
-      ]
-    }
-  ]
+  "rules": []
 }
