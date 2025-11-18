@@ -15,7 +15,7 @@ export default function Home() {
         <header className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white/80 px-5 py-3 shadow-sm backdrop-blur">
           <div className="flex items-center gap-2 text-lg font-semibold tracking-tight text-slate-800">
             <ShieldCheck className="h-5 w-5 text-emerald-500" />
-            Compliance Bro
+            COMPL.AI
           </div>
           <div className="flex items-center gap-3">
             <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-600">
