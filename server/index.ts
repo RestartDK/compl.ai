@@ -1,6 +1,7 @@
 import { POST as complianceCheck } from "./api/compliance-check.ts";
 import { POST as policyIngest } from "./api/policy-ingest.ts";
 import { withCors, handleCorsPreflight, addCorsHeaders } from "./utils/cors.ts";
+import os from "os";
 
 const requiredEnvVars = ["ANTHROPIC_API_KEY", "DAYTONA_API_KEY"] as const;
 
@@ -51,6 +52,42 @@ const server = Bun.serve({
   },
 });
 
-console.log(`🚀 Bun server listening on http://localhost:${server.port}`);
-console.log(`📡 Accessible from network at http://<your-ip>:${server.port}`);
-console.log(`   Find your IP with: ifconfig | grep "inet " | grep -v 127.0.0.1`);
+// Get network IP addresses
+function getNetworkIPs(): string[] {
+  const interfaces = os.networkInterfaces();
+  const ips: string[] = [];
+  
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name] || []) {
+      // Skip internal (loopback) and non-IPv4 addresses
+      // Handle both string ("IPv4") and number (4) family values
+      const family = iface.family as string | number;
+      const isIPv4 = family === "IPv4" || family === 4;
+      if (isIPv4 && !iface.internal) {
+        ips.push(iface.address);
+      }
+    }
+  }
+  
+  return ips;
+}
+
+const networkIPs = getNetworkIPs();
+const port = server.port;
+
+console.log(`\n${"=".repeat(70)}`);
+console.log(`🚀 Bun server listening on http://localhost:${port}`);
+console.log(`${"=".repeat(70)}`);
+if (networkIPs.length > 0) {
+  console.log(`📡 Network Access URLs:`);
+  networkIPs.forEach((ip) => {
+    console.log(`   http://${ip}:${port}`);
+  });
+  console.log(`${"=".repeat(70)}`);
+  console.log(`✅ Server is accessible from your network!`);
+  console.log(`   Share this URL with teammates: http://${networkIPs[0]}:${port}`);
+} else {
+  console.log(`⚠️  Could not detect network IP addresses`);
+  console.log(`   Find your IP with: ifconfig | grep "inet " | grep -v 127.0.0.1`);
+}
+console.log(`${"=".repeat(70)}\n`);
