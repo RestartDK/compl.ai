@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+# backup of original start_localtunnel.sh
+cp start_localtunnel.sh start_localtunnel.sh.bak
+
+echo "Backup saved to start_localtunnel.sh.bak"
