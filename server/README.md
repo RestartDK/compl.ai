@@ -38,6 +38,10 @@ PYTHON_BIN=python
 
 # Optional: Skip deleting Daytona sandboxes (for debugging)
 DAYTONA_PRESERVE_SANDBOXES=false
+
+# Optional: Override the Anthropic model for NL query parsing
+# Defaults to CLAUDE_MODEL, or claude-3-7-sonnet-latest if unset
+CLAUDE_QUERY_MODEL=claude-3-7-sonnet-latest
 ```
 
 **Note:** Bun automatically loads `.env` files, so no additional configuration is needed.
@@ -101,36 +105,46 @@ curl -X POST http://localhost:3000/api/policies/ingest \
 }
 ```
 
-### 2. Compliance Check
+### 2. Natural-Language Compliance Check
 
-Check if a trade is compliant:
+`demo_data_simple.json` (located at the project root) acts as the in-memory “database” for employees and firm-wide restrictions. To run a compliance check:
 
 ```bash
 curl -X POST http://localhost:3000/api/compliance/check \
   -H "Content-Type: application/json" \
   -d '{
-    "firm_name": "JPMorgan",
-    "employee_id": "emp-123",
-    "ticker": "TSLA"
+    "firm_name": "Meridian",
+    "employee_id": "EMP006",
+    "query": "Can I buy Tesla stock tomorrow?"
   }'
 ```
 
-**Expected Response:**
+**Expected Response (shape):**
 ```json
 {
-  "allowed": false,
-  "reasons": [
-    "Trade within 5 days of earnings announcement"
-  ],
-  "policy_refs": [
-    "Section 3.2.1"
-  ],
-  "rules_checked": [
-    "Earnings Announcement Trading Restriction",
-    "Analyst Pre-Approval Requirement"
-  ]
+  "status": "SUCCESS",
+  "firm_name": "Meridian",
+  "employee_id": "EMP006",
+  "parsed_query": {
+    "ticker": "TSLA",
+    "action": "buy",
+    "trade_date": "2025-11-19"
+  },
+  "compliance": {
+    "allowed": true,
+    "reasons": [],
+    "policy_refs": [],
+    "rules_checked": [
+      "Earnings Announcement Trading Blackout",
+      "Analyst Pre-approval Requirement"
+    ]
+  }
 }
 ```
+
+> ⚠️ The exact `rules_checked` list depends on the rules currently stored in `rules/dynamic/`. The key point is that you provide a **natural-language query** plus an **employee ID**, and the API parses the ticker/action/date automatically using Anthropic structured outputs.
+
+For additional manual tests, use the `test_scenarios` array inside `demo_data_simple.json`—each entry already contains an `employee_id`, `query`, and the expected outcome.
 
 ## Testing Script
 

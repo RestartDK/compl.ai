@@ -15,7 +15,7 @@ echo "---------------------------"
 RESPONSE=$(curl -s -X POST "$BASE_URL/api/policies/ingest" \
   -H "Content-Type: application/json" \
   -d '{
-    "firm_name": "TestFirm",
+    "firm_name": "Meridian",
     "policy_text": "Employees cannot trade within 5 days of earnings announcements. Analysts must obtain pre-approval for trades in covered securities."
   }')
 
@@ -28,28 +28,44 @@ echo "⏳ Waiting 5 seconds for rule generation..."
 sleep 5
 echo ""
 
-# Test 2: Compliance Check
-echo "✅ Test 2: Compliance Check"
+# Test 2: Natural-language Compliance Check
+echo "✅ Test 2: Compliance Check (NL query + demo_data_simple.json)"
 echo "---------------------------"
 RESPONSE=$(curl -s -X POST "$BASE_URL/api/compliance/check" \
   -H "Content-Type: application/json" \
   -d '{
-    "firm_name": "TestFirm",
-    "employee_id": "test-emp-001",
-    "ticker": "TSLA"
+    "firm_name": "Meridian",
+    "employee_id": "EMP006",
+    "query": "Can I buy Tesla stock tomorrow?"
   }')
 
 echo "Response:"
 echo "$RESPONSE" | jq '.' 2>/dev/null || echo "$RESPONSE"
 echo ""
 
-# Test 3: Invalid Request (missing fields)
-echo "❌ Test 3: Invalid Request (Error Handling)"
-echo "---------------------------------------------"
-RESPONSE=$(curl -s -X POST "$BASE_URL/api/policies/ingest" \
+# Test 3: Compliance Violation (should be blocked)
+echo "🚫 Test 3: Compliance Violation (Should Be Blocked)"
+echo "---------------------------"
+RESPONSE=$(curl -s -X POST "$BASE_URL/api/compliance/check" \
   -H "Content-Type: application/json" \
   -d '{
-    "firm_name": "TestFirm"
+    "firm_name": "Meridian",
+    "employee_id": "EMP002",
+    "query": "Can I buy Apple stock?"
+  }')
+
+echo "Response:"
+echo "$RESPONSE" | jq '.' 2>/dev/null || echo "$RESPONSE"
+echo ""
+
+# Test 4: Invalid Request (missing query)
+echo "❌ Test 4: Invalid Request (Missing Query)"
+echo "---------------------------------------------"
+RESPONSE=$(curl -s -X POST "$BASE_URL/api/compliance/check" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firm_name": "Meridian",
+    "employee_id": "EMP006"
   }')
 
 echo "Response:"

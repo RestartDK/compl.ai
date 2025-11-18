@@ -40,18 +40,34 @@ export interface GenerationContext {
   previous_attempt?: PreviousAttemptContext;
 }
 
-export interface Employee {
+export interface Employee extends Record<string, unknown> {
   id: string;
   role: string;
-  division: string;
+  division?: string;
   firm: string;
   covered_tickers?: string[];
+  tier?: number;
+  department?: string;
+  sector?: string;
+  restricted_tickers?: string[];
+  can_trade?: string[];
+  can_trade_reason?: string;
+  restriction_reason?: string;
+  trading_desk?: string;
+  active_deals?: unknown[];
+  coverage_stocks?: unknown[];
+  quiet_periods?: unknown[];
+  family_conflicts?: unknown[];
+  recently_overheard?: unknown[];
+  firm_restrictions?: unknown;
+  quick_reference?: Record<string, unknown>;
 }
 
-export interface Security {
+export interface Security extends Record<string, unknown> {
   ticker: string;
   earnings_date?: string;
   market_cap?: number;
+  requested_action?: string;
 }
 
 export interface ComplianceResult {
