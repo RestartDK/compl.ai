@@ -21,7 +21,7 @@ const corsOptions = {
 
 const server = Bun.serve({
   hostname: "0.0.0.0", // Listen on all network interfaces
-  port: Number(process.env.PORT ?? 3000),
+  port: Number(process.env.PORT ?? 3001),
   routes: {
     "/health": {
       GET: withCors(() => {

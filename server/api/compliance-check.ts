@@ -74,9 +74,7 @@ export async function POST(request: Request): Promise<Response> {
           : undefined) ??
         (typeof (employeeRecord as Record<string, unknown>).department ===
         "string"
-          ? String(
-              (employeeRecord as Record<string, unknown>).department,
-            )
+          ? String((employeeRecord as Record<string, unknown>).department)
           : "General"),
       firm: firmName,
       covered_tickers: Array.isArray(
@@ -131,4 +129,3 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 }
-
