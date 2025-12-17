@@ -1,11 +1,9 @@
-"use client";
-
 import { useState } from "react";
 import { PartyPopper, ShieldCheck } from "lucide-react";
-import { QuestionCard } from "../components/question-card";
-import { RoleCard } from "../components/role-card";
+import { QuestionCard } from "./components/QuestionCard";
+import { RoleCard } from "./components/RoleCard";
 
-export default function Home() {
+export default function App() {
   const [position, setPosition] = useState("Financial Advisor");
   const [company, setCompany] = useState("Goldman Sacks");
 

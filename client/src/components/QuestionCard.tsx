@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Sparkles, Loader2 } from "lucide-react";
 import { getEmployeeId } from "../lib/employee-mapping";
@@ -11,7 +9,7 @@ type Props = {
 
 type Decision = "yes" | "no" | "ask";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 export function QuestionCard({ position, company }: Props) {
   const [decision, setDecision] = useState<Decision | null>(null);
@@ -31,7 +29,7 @@ Company: ${company}
 Based on our internal policy, I need clarification before proceeding.
 
 Thanks!`,
-    [company, position, query],
+    [company, position, query]
   );
 
   useEffect(() => {
@@ -65,21 +63,25 @@ Thanks!`,
       if (data.status === "SUCCESS" && data.compliance) {
         const isAllowed = data.compliance.allowed;
         setDecision(isAllowed ? "yes" : "no");
-        
+
         // Format the reason from backend
         const backendReasons = data.compliance.reasons || [];
-        const formattedReason = backendReasons.length > 0 
-          ? backendReasons.join(" ") 
-          : isAllowed 
-            ? "No conflicts detected with firm policy." 
-            : "This trade is restricted by firm policy.";
-            
+        const formattedReason =
+          backendReasons.length > 0
+            ? backendReasons.join(" ")
+            : isAllowed
+              ? "No conflicts detected with firm policy."
+              : "This trade is restricted by firm policy.";
+
         setReason(formattedReason);
       } else {
         // Handle error or unsure response
         console.error("Backend error:", data);
         setDecision("ask");
-        setReason(data.message || "We couldn't determine a clear answer. Please consult compliance.");
+        setReason(
+          data.message ||
+            "We couldn't determine a clear answer. Please consult compliance."
+        );
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -97,10 +99,8 @@ Thanks!`,
           <Sparkles className="h-4 w-4 text-emerald-500" />
           Ask a compliance question
         </div>
-        {/* Hidden debugger for now, or keep if desired */}
-        {/* <DecisionSwitcher decision={decision || "yes"} onChange={setDecision} /> */}
       </div>
-      
+
       <div className="mt-5 grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
         <input
           type="text"
@@ -111,7 +111,7 @@ Thanks!`,
           disabled={isLoading}
           className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:-translate-y-0.5 focus:border-emerald-400 focus:shadow-md disabled:opacity-50"
         />
-        <button 
+        <button
           onClick={handleCheck}
           disabled={isLoading || !query.trim()}
           className="inline-flex h-12 items-center justify-center rounded-xl border border-emerald-500 bg-emerald-500 px-5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
@@ -143,8 +143,6 @@ Thanks!`,
   );
 }
 
-// ... existing helper components ...
-
 type ResponsePreviewProps = {
   decision: Decision;
   company: string;
@@ -156,22 +154,19 @@ type ResponsePreviewProps = {
 
 function ResponsePreview({
   decision,
-  company,
   reason,
   emailTemplate,
   copied,
   onCopy,
 }: ResponsePreviewProps) {
   return (
-    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner md:px-5 animate-in fade-in slide-in-from-top-2 duration-300">
+    <div className="animate-in fade-in slide-in-from-top-2 mt-6 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner duration-300 md:px-5">
       {decision === "yes" && (
         <div className="space-y-2">
           <p className="text-sm font-semibold text-emerald-700">
             ✅ Yes — you can proceed.
           </p>
-          <p className="text-sm text-slate-600">
-            {reason}
-          </p>
+          <p className="text-sm text-slate-600">{reason}</p>
         </div>
       )}
 
@@ -180,17 +175,13 @@ function ResponsePreview({
           <p className="text-sm font-semibold text-rose-700">
             🚫 No — purchase is blocked.
           </p>
-          <p className="text-sm text-slate-600">
-            {reason}
-          </p>
+          <p className="text-sm text-slate-600">{reason}</p>
         </div>
       )}
 
       {decision === "ask" && (
         <div className="space-y-3">
-          <p className="text-sm font-semibold text-amber-700">
-            🤔 {reason}
-          </p>
+          <p className="text-sm font-semibold text-amber-700">🤔 {reason}</p>
           <textarea
             readOnly
             value={emailTemplate}
