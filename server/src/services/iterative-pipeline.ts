@@ -4,9 +4,9 @@ import type {
   RulesData,
   ValidationAttempt,
 } from "../types/index.ts";
-import { DaytonaValidator } from "./daytona-validator.ts";
-import { LLMGenerator } from "./llm-generator.ts";
-import { RulesStorage } from "./rules-storage.ts";
+import { DaytonaValidator } from "./daytona-validator";
+import { LLMGenerator } from "./llm-generator";
+import { RulesStorage } from "./rules-storage";
 
 interface ValidationLoopResult {
   validated: boolean;

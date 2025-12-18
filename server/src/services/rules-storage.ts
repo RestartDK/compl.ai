@@ -1,4 +1,6 @@
 import { mkdirSync } from "node:fs";
+import { writeFile, readFile, access } from "node:fs/promises";
+import { constants } from "node:fs";
 import { dirname, join } from "node:path";
 import type { Rule, RulesData } from "../types/index.ts";
 
@@ -45,7 +47,7 @@ export class RulesStorage {
 
 		const filePath = this.getFilePath(firmName);
 		ensureDir(dirname(filePath));
-		await Bun.write(filePath, JSON.stringify(data, null, 2));
+		await writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
 		this.cache.set(firmName, data);
 		return data;
 	}
@@ -55,12 +57,14 @@ export class RulesStorage {
 			return this.cache.get(firmName)!;
 		}
 
-		const file = Bun.file(this.getFilePath(firmName));
-		if (!(await file.exists())) {
+		const filePath = this.getFilePath(firmName);
+		try {
+			await access(filePath, constants.F_OK);
+		} catch {
 			return null;
 		}
 
-		const contents = await file.text();
+		const contents = await readFile(filePath, "utf-8");
 		const parsed = JSON.parse(contents) as RulesData;
 		this.cache.set(firmName, parsed);
 		return parsed;

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Sparkles, Loader2 } from "lucide-react";
-import { getEmployeeId } from "../lib/employee-mapping";
+import { findEmployeeByFirmAndRole, getFirmRestrictions } from "../lib/data-storage";
 
 type Props = {
   position: string;
@@ -44,14 +44,25 @@ Thanks!`,
     setReason("");
 
     try {
-      const employeeId = getEmployeeId(company, position);
+      const employee = findEmployeeByFirmAndRole(company, position);
+      
+      if (!employee) {
+        setDecision("ask");
+        setReason(`No employee found matching "${position}" at "${company}". Please check your role and company selection.`);
+        setIsLoading(false);
+        return;
+      }
+
+      const { firm_restricted_list, quick_reference } = getFirmRestrictions();
 
       const res = await fetch("/api/compliance/check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firm_name: company,
-          employee_id: employeeId,
+          employee: employee,
+          firm_restricted_list: firm_restricted_list,
+          quick_reference: quick_reference,
           query: query,
         }),
       });
