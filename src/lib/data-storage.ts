@@ -104,7 +104,7 @@ export function resetToDefault(): void {
 export function findEmployeeByFirmAndRole(
   firm: string,
   role: string
-): DemoData['demo_employees'][0] | null {
+): NonNullable<DemoData['demo_employees']>[number] | null {
   const data = getStoredData();
   if (!data?.demo_employees) return null;
   
