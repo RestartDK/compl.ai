@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
-import { QueryParser } from '../services/query-parser.ts'
-import { RulesExecutor } from '../services/rules-executor.ts'
-import { getEmployeeById, getFirmRestrictions } from '../services/demo-data.ts'
+import { QueryParser } from '../services/query-parser'
+import { RulesExecutor } from '../services/rules-executor'
 import type { Employee, Security } from '../types/index.ts'
 
 const app = new Hono()
@@ -11,7 +10,9 @@ const parser = new QueryParser()
 
 interface ComplianceCheckRequest {
   firm_name?: string
-  employee_id?: string
+  employee?: Record<string, unknown>
+  firm_restricted_list?: unknown[]
+  quick_reference?: Record<string, unknown>
   query?: string
   trade_date?: string
 }
@@ -20,15 +21,39 @@ app.post('/check', async (c) => {
   try {
     const body = (await c.req.json()) as ComplianceCheckRequest
     const firmName = body.firm_name?.trim()
-    const employeeId = body.employee_id?.trim()
+    const employee = body.employee
+    const firmRestrictedList = body.firm_restricted_list
+    const quickReference = body.quick_reference
     const query = body.query?.trim()
 
-    if (!firmName || !employeeId || !query) {
+    if (!firmName || !query) {
       return c.json(
         {
           status: 'ERROR',
           code: 'INVALID_REQUEST',
-          message: 'firm_name, employee_id, and query are required.',
+          message: 'firm_name and query are required.',
+        },
+        400,
+      )
+    }
+
+    if (!employee || typeof employee !== 'object') {
+      return c.json(
+        {
+          status: 'ERROR',
+          code: 'INVALID_REQUEST',
+          message: 'employee object is required.',
+        },
+        400,
+      )
+    }
+
+    if (!Array.isArray(firmRestrictedList)) {
+      return c.json(
+        {
+          status: 'ERROR',
+          code: 'INVALID_REQUEST',
+          message: 'firm_restricted_list array is required.',
         },
         400,
       )
@@ -36,6 +61,7 @@ app.post('/check', async (c) => {
 
     let parsedQuery
     try {
+      const employeeId = typeof employee.id === 'string' ? employee.id : undefined
       parsedQuery = await parser.parseQuery(query, { firmName, employeeId })
     } catch (error) {
       return c.json(
@@ -49,45 +75,23 @@ app.post('/check', async (c) => {
       )
     }
 
-    const employeeRecord = await getEmployeeById(employeeId)
-    if (!employeeRecord) {
-      return c.json(
-        {
-          status: 'ERROR',
-          code: 'EMPLOYEE_NOT_FOUND',
-          message: `Employee ${employeeId} was not found in demo_data_simple.json.`,
-        },
-        404,
-      )
-    }
+    const employeeId = typeof employee.id === 'string' ? employee.id : 'UNKNOWN'
+    const employeeRole = typeof employee.role === 'string' ? employee.role : 'Employee'
+    const employeeDivision = typeof employee.division === 'string' 
+      ? employee.division 
+      : (typeof employee.department === 'string' ? employee.department : 'General')
 
-    const { firm_restricted_list, quick_reference } =
-      await getFirmRestrictions()
-
-    const employee: Employee = {
-      ...(employeeRecord as Record<string, unknown>),
-      id: employeeRecord.id,
-      role:
-        (typeof employeeRecord.role === 'string'
-          ? employeeRecord.role
-          : undefined) ?? 'Employee',
-      division:
-        (typeof employeeRecord.division === 'string'
-          ? employeeRecord.division
-          : undefined) ??
-        (typeof (employeeRecord as Record<string, unknown>).department ===
-        'string'
-          ? String((employeeRecord as Record<string, unknown>).department)
-          : 'General'),
+    const employeeData: Employee = {
+      ...(employee as Record<string, unknown>),
+      id: employeeId,
+      role: employeeRole,
+      division: employeeDivision,
       firm: firmName,
-      covered_tickers: Array.isArray(
-        (employeeRecord as Record<string, unknown>).restricted_tickers,
-      )
-        ? ((employeeRecord as Record<string, unknown>)
-            .restricted_tickers as string[])
+      covered_tickers: Array.isArray(employee.restricted_tickers)
+        ? (employee.restricted_tickers as string[])
         : undefined,
-      firm_restrictions: firm_restricted_list,
-      quick_reference,
+      firm_restrictions: firmRestrictedList,
+      quick_reference: quickReference,
     } as Employee
 
     const security: Security = {
@@ -103,7 +107,7 @@ app.post('/check', async (c) => {
 
     const result = await executor.checkCompliance(
       firmName,
-      employee,
+      employeeData,
       security,
       tradeDate,
     )

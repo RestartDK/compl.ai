@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { IterativePipeline } from '../services/iterative-pipeline.ts'
+import { IterativePipeline } from '../services/iterative-pipeline'
 
 const app = new Hono()
 
@@ -37,7 +37,7 @@ app.post('/ingest', async (c) => {
         rule_name: rule.rule_name,
         description: rule.description,
         attempts: rule.generation_attempt,
-        validated: rule.validation_history.at(-1)?.passed ?? false,
+        validated: rule.validation_history[rule.validation_history.length - 1]?.passed ?? false,
       })),
     })
   } catch (error) {
